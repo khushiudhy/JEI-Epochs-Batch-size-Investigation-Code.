@@ -4,6 +4,7 @@ library(ggplot2)
 library(dplyr)
 library(viridis)
 
+
 # GRAPHS 
 
 # EPOCHS
@@ -22,20 +23,19 @@ Epochs <- filter(Epochs_test, epochs <= 7)
 benchmark_df_epochs <- data.frame(
   x = c(min(Epochs$epochs), max(Epochs$epochs)),
   y = c(50, 50),
-  label = "Benchmark for Random Guessing"
+  label = "Benchmark for random guessing"
 )
 
 ggplot(Epochs, aes(x = epochs, y = percent_train_accuracy)) +
   geom_point(aes(color = "Trials")) +
   geom_smooth(aes(color = "Regression line"), method = "lm", se = FALSE) +
-  geom_line(data = benchmark_df, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
+  geom_line(data = benchmark_df_epochs, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
   scale_color_manual(
     name = "Legend",
-    # Order legend by the order you specify here
-    breaks = c("Trials", "Regression line", "Benchmark for Random Guessing"),
+    breaks = c("Trials", "Regression line", "Benchmark for random guessing"),
     values = c("Trials" = "black",
                "Regression line" = "blue",
-               "Benchmark for Random Guessing" = "tan1")
+               "Benchmark for random guessing" = "tan1")
   ) +
   labs(x = "Epochs",
        y = "Training accuracy (%) with 100 samples") +
@@ -44,19 +44,19 @@ ggplot(Epochs, aes(x = epochs, y = percent_train_accuracy)) +
         legend.position = "right")
 
 
+
 #TESTING GRAPH
 
 ggplot(Epochs, aes(x = epochs, y = percent_test_accuracy)) +
   geom_point(aes(color = "Trials")) +
   geom_smooth(aes(color = "Regression line"), method = "lm", se = FALSE) +
-  geom_line(data = benchmark_df, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
+  geom_line(data = benchmark_df_epochs, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
   scale_color_manual(
     name = "Legend",
-    # Order legend by the order you specify here
-    breaks = c("Trials", "Regression line", "Benchmark for Random Guessing"),
+    breaks = c("Trials", "Regression line", "Benchmark for random guessing"),
     values = c("Trials" = "black",
                "Regression line" = "blue",
-               "Benchmark for Random Guessing" = "tan1")
+               "Benchmark for random guessing" = "tan1")
   ) +
   labs(x = "Epochs",
        y = "Testing accuracy (%) with 20 samples") +
@@ -75,7 +75,7 @@ BatchSize <- mutate(Batch_train, percent_test_accuracy = test_accuracy * 100)
 benchmark_df_batchsize <- data.frame(
   x = c(min(BatchSize$batch_size), max(BatchSize$batch_size)),
   y = c(50, 50),
-  label = "Benchmark for Random Guessing"
+  label = "Benchmark for random guessing"
 )
 
 # TRAINING GRAPH
@@ -86,13 +86,12 @@ ggplot(BatchSize, aes(x = batch_size, y = percent_train_accuracy)) +
   geom_line(data = benchmark_df_batchsize, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
   scale_color_manual(
     name = "Legend",
-    # Order legend by the order you specify here
-    breaks = c("Trials", "Regression line", "Benchmark for Random Guessing"),
+    breaks = c("Trials", "Regression line", "Benchmark for random guessing"),
     values = c("Trials" = "black",
                "Regression line" = "blue",
-               "Benchmark for Random Guessing" = "tan1")
+               "Benchmark for random guessing" = "tan1")
   ) +
-  labs(x = "Batch Size",
+  labs(x = "Batch size",
        y = "Training accuracy (%) with 100 samples") +
   theme(axis.title.y = element_text(size = 8),
         axis.title.x = element_text(size = 8),
@@ -107,17 +106,17 @@ ggplot(BatchSize, aes(x = batch_size, y = percent_test_accuracy)) +
   geom_line(data = benchmark_df_batchsize, aes(x = x, y = y, color = label), linetype = "dashed", size = 0.7) +
   scale_color_manual(
     name = "Legend",
-    # Order legend by the order you specify here
-    breaks = c("Trials", "Regression line", "Benchmark for Random Guessing"),
+    breaks = c("Trials", "Regression line", "Benchmark for random guessing"),
     values = c("Trials" = "black",
                "Regression line" = "blue",
-               "Benchmark for Random Guessing" = "tan1")
+               "Benchmark for random guessing" = "tan1")
   ) +
-  labs(x = "Batch Size",
+  labs(x = "Batch size",
        y = "Testing accuracy (%) with 20 samples") +
   theme(axis.title.y = element_text(size = 8),
         axis.title.x = element_text(size = 8),
         legend.position = "right")
+
 # Bubble Plot
 freq_Batchsize <- BatchSize %>%
   group_by(batch_size, test_accuracy) %>%
@@ -125,9 +124,9 @@ freq_Batchsize <- BatchSize %>%
 
 ggplot(freq_Batchsize, aes(x = batch_size, y = (test_accuracy*100), size = freq)) +
   geom_point(alpha = 0.8, shape = 21, color = "black", fill = "tan1") +
-  scale_size_continuous(name = "Frequency of trials", range = c(1, 16), guide = "none") +
+  scale_size_continuous(name = "Number of trials", range = c(1, 16), guide = "none") +
   #scale_fill_viridis_c(name = "Frequency", option = "viridis") +
-  labs(x = "Batch Size", y = "Testing Accuracy (%) for 20 test samples", size = "Frequency") +
+  labs(x = "Batch size", y = "Testing accuracy (%) for 20 test samples", size = "Frequency") +
   guides(size = guide_legend(override.aes = list(shape = 21)))+
   scale_x_continuous(breaks = c(5, 10, 25, 50, 75, 100))+
   theme(axis.title.y = element_text(size = 8), axis.title.x = element_text(size =8))
